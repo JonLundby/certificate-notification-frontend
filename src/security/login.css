@@ -1,0 +1,15 @@
+.login-container {
+    background-color: dimgray;
+    padding: 70px;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-btn {
+    margin: 12px;
+}

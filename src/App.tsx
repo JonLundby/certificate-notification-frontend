@@ -1,12 +1,42 @@
-import './App.css'
+import "./App.css";
+import Layout from "./Layout";
+import { Route, Routes, Outlet } from "react-router-dom";
+import Login from "./security/Login";
+import Overview from "./overview/Overview";
+import UriUpload from "./upload/UriUpload";
+import CertificateUpload from "./upload/CertificateUpload";
+import { useAuth } from "./security/AuthProvider";
+import RequireAuth from "./security/RequireAuth";
+import Logout from "./security/Logout";
+import { Navigate } from "react-router-dom";
 
-function App() {
+export default function App() {
+    const auth = useAuth();
 
-  return (
-    <>
-      <h1>CERTIFICATE NOTIFICATION TOOL</h1>
-    </>
-  )
+    // if (!auth.isLoggedIn()) {
+    //     return <Login />;
+    // }
+
+    return (
+        <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/logout" element={<Logout />} />
+
+            {/* Protected routes inside Layout */}
+            <Route
+                element={
+                    <RequireAuth roles={["admin", "user"]}>
+                        <Layout />
+                    </RequireAuth>
+                }
+            >
+                <Route path="/overview" element={<Overview />} />
+                <Route path="/uploaduri" element={<UriUpload />} />
+                <Route path="/uploadcertificate" element={<CertificateUpload />} />
+            </Route>
+
+            {/* Redirect unknown paths */}
+            <Route path="*" element={auth.isLoggedIn() ? <Navigate to="/overview" /> : <Navigate to="/login" />} />
+        </Routes>
+    );
 }
-
-export default App

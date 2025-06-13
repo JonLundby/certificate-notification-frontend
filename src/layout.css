@@ -1,0 +1,62 @@
+.nav-header {
+    position: fixed;
+    top: 0;
+    height: 60px;
+    margin: 16px;
+}
+
+.page-content {
+    opacity: 1;
+    transition: opacity 2.5s ease-in-out;
+}
+
+.layout-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+nav ul {
+    list-style: none;
+    font-size: 1.2rem;
+    padding: 0;
+    margin: 0;
+}
+
+nav a.active {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+nav ul li {
+    color: darkcyan;
+    display: inline-block;
+}
+
+nav ul li a {
+    text-decoration: none; /* Removes underline from links */
+    color: inherit; /* Inherits color from parent element */
+    outline: none;
+    display: inline-block;
+    margin-right: 1rem;
+}
+.nav ul .active {
+    color: lightblue;
+    text-decoration: underline;
+}
+
+.vertical-a-tags {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.vertical-a-tags a {
+    margin: 0.5rem 0;
+    color: darkcyan;
+    text-decoration: none;
+}
