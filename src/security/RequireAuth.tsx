@@ -10,11 +10,11 @@ export default function RequireAuth({ children, roles }: Props) {
     const auth = useAuth();
     const location = useLocation();
 
-    if (!auth.isLoggedIn()) {
+    if (!auth.isLoggedIn()) { // Check if user is logged in
         return <Navigate to="/login" state={{ from: location }} replace />;
     }
 
-    if (roles && !auth.isLoggedInAs(roles)) {
+    if (roles && !auth.isLoggedInAs(roles)) { // Check if user has the required roles
         return <Navigate to="/login" state={{ from: location }} replace />;
     }
 

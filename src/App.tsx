@@ -1,6 +1,6 @@
 import "./App.css";
 import Layout from "./Layout";
-import { Route, Routes, Outlet } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Login from "./security/Login";
 import Overview from "./overview/Overview";
 import UriUpload from "./upload/UriUpload";

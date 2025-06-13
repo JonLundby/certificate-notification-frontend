@@ -38,8 +38,8 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     }
 
     function isLoggedInAs(role: string[]) {
-        const roles: Array<string> = JSON.parse(localStorage.getItem("roles") || "[]");
-        return roles?.some((r) => role.includes(r)) || false;
+        const roles: Array<string> = JSON.parse(localStorage.getItem("roles") || "[]"); // get the roles from localStorage, default to an empty array if not found
+        return roles?.some((r) => role.includes(r)) || false; // return true if the user has at least one of the roles passed in, otherwise false
     }
 
     const value = { username, login, logout, isLoggedIn, isLoggedInAs };
