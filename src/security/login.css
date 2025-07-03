@@ -1,6 +1,7 @@
 .login-container {
     background-color: dimgray;
     padding: 70px;
+    border-radius: 4px;
 }
 
 .login-form {
