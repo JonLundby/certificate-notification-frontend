@@ -17,7 +17,7 @@ interface LoginRequest {
 
 const authProvider = {
     isAuthenticated: false,
-    signIn(user_: LoginRequest): Promise<LoginResponse> {
+    signIn(user_: LoginRequest): Promise<LoginResponse> { // user_ is of type LoginRequest and prom
         // const options = makeOptions("POST", user_);
         // return fetch(LOGIN_URL, options).then(handleHttpErrors);
         return new Promise((resolve, reject) => {

@@ -2,9 +2,9 @@ import "./App.css";
 import Layout from "./Layout";
 import { Route, Routes } from "react-router-dom";
 import Login from "./security/Login";
-import Overview from "./overview/Overview";
-import UriUpload from "./upload/UriUpload";
-import CertificateUpload from "./upload/CertificateUpload";
+import Overview from "./pages/overview/Overview";
+import UriUpload from "./pages/upload_URI/UriUpload";
+import CertificateUpload from "./pages/upload_client_certificate/CertificateUpload";
 import { useAuth } from "./security/AuthProvider";
 import RequireAuth from "./security/RequireAuth";
 import Logout from "./security/Logout";
@@ -12,10 +12,6 @@ import { Navigate } from "react-router-dom";
 
 export default function App() {
     const auth = useAuth();
-
-    // if (!auth.isLoggedIn()) {
-    //     return <Login />;
-    // }
 
     return (
         <Routes>
