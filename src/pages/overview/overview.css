@@ -1,3 +1,14 @@
+.overview-page-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #525353;
+    font-family: Arial, sans-serif;
+    width: 90vw;
+    height: 80vh;
+}
+
 button {
     width: 150px;
     padding: 10px 20px;
@@ -10,5 +21,8 @@ button {
 
 .tab-buttons {
     display: flex;
+    justify-content: center;
     gap: 10px;
+    margin: 8px;
+    width: 500px;
 }
