@@ -7,7 +7,7 @@ export default function CertificateTable({uris}: { uris: URI[] }) {
             <table>
                 <thead>
                     <tr>
-                        <th></th>
+                        <th>URI</th>
                         <th></th>
                     </tr>
                 </thead>

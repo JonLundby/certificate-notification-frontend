@@ -1,8 +1,11 @@
 .nav-header {
     position: fixed;
     top: 0;
-    height: 60px;
     margin: 16px;
+    background-color: black;
+    padding: 8px;
+    border-radius: 8px;
+    position: relative;
 }
 
 .page-content {

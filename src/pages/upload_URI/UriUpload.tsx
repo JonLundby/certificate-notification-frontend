@@ -30,16 +30,13 @@ export default function UriUpload() {
             <p>Enter a list of URI that you want to upload</p>
             <p>( each uri must be line separated! )</p>
             <br />
-            <br />
-            <br />
 
             <textarea
-                rows={24}
-                cols={20}
+                rows={10}
+                cols={10}
                 placeholder={`https://example.com\nldaps://another.com\nimaps://a-third.com`}
                 value={uriText}
                 onChange={(e) => setUriText(e.target.value)}
-                style={{ width: "80%", marginBottom: "1rem" }}
             />
             <button onClick={handleUpload}>{status === "uploading" ? "Uploading..." : "Upload"}</button>
 

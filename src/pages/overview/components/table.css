@@ -1,23 +1,29 @@
-table {
-    width: 94%;
-    border-collapse: collapse; /* Ensures borders are shared between cells */
-    margin-top: 12px;
-    /* border: 1px solid #ccc; Adds a border around the table */
-    padding: 12px; /* Adds padding inside the table */
-}
 
 thead {
-    border: #ccc solid 1px; /* Adds a border to the header */
+    border: #ccc solid 1px;
     font-size: 1.1rem;
 }
 
-th {
-    background-color: #242424; /* Light gray background for header */
-    font-weight: bold; /* Makes header text bold */
+tbody {
+    font-size: 1rem;
+    background-color: #2c2f36af;
+    color: #ffffff;
 }
 
-th, td {
-    padding: 8px; /* Adds padding inside each cell */
-    text-align: left; /* Aligns text to the left */
-    border-bottom: 1px solid #ddd; /* Adds a bottom border to each cell */
+th {
+    background-color: #474a50cc;
+    font-weight: bold;
+    padding: 8px;
+}
+
+td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #dddddd4f;
+    padding: 20px;
+}
+
+.no-border-bottom td {
+    border-bottom: none;
+    
 }
