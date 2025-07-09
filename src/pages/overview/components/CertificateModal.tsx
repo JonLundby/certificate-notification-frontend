@@ -1,5 +1,6 @@
 import "./certificateModal.css";
 import { type Certificate } from "../../../services/apiFacade";
+import { useState } from "react";
 
 const dateOptions: Intl.DateTimeFormatOptions = {
     weekday: "long",
@@ -9,6 +10,9 @@ const dateOptions: Intl.DateTimeFormatOptions = {
 };
 
 export default function CertificateModal({ certificate, onClose }: { certificate: Certificate; onClose: () => void }) {
+    const [newNoteText, setNewNoteText] = useState("");
+    const [isAddingNote, setIsAddingNote] = useState(false);
+
     return (
         <div className="modal-overlay">
             <div className="modal-content">
@@ -84,9 +88,27 @@ export default function CertificateModal({ certificate, onClose }: { certificate
                 </div>
                 <div className="modal-notes">
                     <br />
-                    <p>
-                        <strong>Notes:</strong>
-                    </p>
+                    {!isAddingNote && (
+                        <p>
+                            <strong>Notes:</strong>
+                            <button className="new-note-btn" onClick={() => setIsAddingNote(true)}>
+                                New note
+                            </button>
+                        </p>
+                    )}
+                    {isAddingNote && (
+                        <div className="new-note-form">
+                            <textarea
+                                value={newNoteText}
+                                onChange={(e) => setNewNoteText(e.target.value)}
+                                placeholder="Write your note here..."
+                            />
+                            <div className="new-note-btns">
+                                <button onClick={() => setIsAddingNote(false)}>Add note</button>
+                                <button onClick={() => setIsAddingNote(false)}>Cancel</button>
+                            </div>
+                        </div>
+                    )}
                     <ul>
                         {[...certificate.notes]
                             .sort((a, b) => new Date(b.localDateTimeStamp).getTime() - new Date(a.localDateTimeStamp).getTime())

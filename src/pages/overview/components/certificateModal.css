@@ -47,3 +47,22 @@
     display: block;
     margin-left: 60px;
 }
+
+.new-note-btn {
+    background-color: #2d6d989e;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.new-note-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+button {
+    margin: 4px;
+}
