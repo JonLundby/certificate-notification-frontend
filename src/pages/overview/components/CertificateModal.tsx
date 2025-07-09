@@ -41,7 +41,7 @@ export default function CertificateModal({ certificate, onClose }: { certificate
                     <p>
                         <strong>Serial number:</strong>{" "}
                         {certificate.issuerSerialNumberId.substring(
-                            certificate.issuerSerialNumberId.indexOf("#"),
+                            certificate.issuerSerialNumberId.indexOf("#") + 1,
                             certificate.issuerSerialNumberId.length
                         )}
                     </p>
