@@ -1,6 +1,6 @@
 const CERTIFICATES_URL = "http://localhost:8080/certificates";
 const URIS_URL = "http://localhost:8080/uris";
-const SCAN_URL = "http://localhost:8080/uris/scan?notify=true";
+const SCAN_URL = "http://localhost:8080/uris/scan";
 
 export interface Certificate {
     id: number;
