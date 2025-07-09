@@ -31,6 +31,7 @@ nav ul {
 nav a.active {
     font-weight: bold;
     text-decoration: underline;
+    color: lightcyan;
 }
 
 nav ul li {

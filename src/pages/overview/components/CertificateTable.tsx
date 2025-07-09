@@ -1,4 +1,5 @@
 import "./table.css";
+import React from "react";
 import { type Certificate } from "../../../services/apiFacade";
 import { useState } from "react";
 
@@ -37,8 +38,8 @@ export default function CertificateTable({ certificates }: { certificates: Certi
             </thead>
             <tbody>
                 {certificates.map((certificate) => (
-                    <>
-                        <tr key={certificate.id} className={expandedIds.has(certificate.id) ? "no-border-bottom" : ""}>
+                    <React.Fragment key={certificate.id}>
+                        <tr className={expandedIds.has(certificate.id) ? "no-border-bottom" : ""}>
                             <td>{certificate.type}</td>
                             <td>
                                 {certificate.subject.split(",").map((part, index) => (
@@ -55,7 +56,7 @@ export default function CertificateTable({ certificates }: { certificates: Certi
                                 {/* ADJUST TO DESIRABLE TIMEFRAME FX: 7 * 24 *... FOR A 7 DAY WARNING*/}
                                 {new Date(certificate.dateNotAfter).getTime() - Date.now() < 60 * 24 * 60 * 60 * 1000 && <span> ⚠️</span>}
                             </td>
-                            <td>{ certificate.uris.length}</td>
+                            <td>{certificate.uris.length}</td>
                             <td>
                                 <button
                                     onClick={() => {
@@ -81,11 +82,13 @@ export default function CertificateTable({ certificates }: { certificates: Certi
                                         ))}
                                     </ul>
                                 </td>
-                                <td></td> {/* Empty cell for alignment */}
-                                <td></td> {/* Empty cell for alignment */}
+                                {/* Empty cell for alignment */}
+                                <td></td>
+                                {/* Empty cell for alignment */}
+                                <td></td>
                             </tr>
                         )}
-                    </>
+                    </React.Fragment>
                 ))}
             </tbody>
         </table>

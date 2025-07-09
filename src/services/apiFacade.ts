@@ -1,5 +1,6 @@
 const CERTIFICATES_URL = "http://localhost:8080/certificates";
 const URIS_URL = "http://localhost:8080/uris";
+const SCAN_URL = "http://localhost:8080/uris/scan?notify=true";
 
 export interface Certificate {
     id: number;
@@ -47,4 +48,22 @@ async function fetchURIs(): Promise<URI[]> {
     return response.json();
 }
 
-export { fetchCertificates, fetchURIs };
+async function scanUrisAndFetchCertificates(): Promise<Certificate[]> {
+    const response = await fetch(SCAN_URL, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error(`Failed to scan URIs: ${response.statusText}`);
+    }
+
+    // Optionally wait a moment if backend is async
+    // await new Promise(res => setTimeout(res, 1000));
+
+    return fetchCertificates();
+}
+
+export { fetchCertificates, fetchURIs, scanUrisAndFetchCertificates };

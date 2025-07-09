@@ -26,7 +26,6 @@ export default function UriUpload() {
 
     return (
         <div className="uri-upload-container">
-            <h2>Upload URI</h2>
             <p>Enter a list of URI that you want to upload</p>
             <p>( each uri must be line separated! )</p>
             <br />
