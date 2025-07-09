@@ -1,0 +1,49 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    grid-template-areas: "title title" "details date-details" "notes notes";
+    gap: 20px;
+    background-color: #28343c;
+    padding: 50px;
+    border-radius: 4px;
+    max-height: 90vh;
+    max-width: 70vw;
+    overflow-y: auto;
+    width: 80%;
+    box-shadow: 0 2px 10px rgba(0, 0, 0);
+}
+
+.modal-title {
+    grid-area: title;
+}
+
+.modal-details {
+    grid-area: details;
+}
+
+.modal-date-details {
+    grid-area: date-details;
+}
+
+.modal-notes {
+    grid-area: notes;
+}
+
+.subject-part {
+    display: block;
+    margin-left: 60px;
+}
