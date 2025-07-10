@@ -2,14 +2,20 @@ import "./overview.css";
 import { useState, useEffect } from "react";
 import CertificateTable from "./components/CertificateTable";
 import UriTable from "./components/UriTable";
-import { fetchCertificates, fetchURIs, scanUrisAndFetchCertificates, type Certificate, type URI, type Note } from "../../services/apiFacade";
+import {
+    fetchCertificates,
+    fetchURIs,
+    scanUrisAndFetchCertificates,
+    type Certificate,
+    type URI,
+    type Note,
+} from "../../services/apiFacade";
 
 export default function Overview() {
     const [selectedTab, setSelectedTab] = useState<"certificates" | "uris">("certificates");
     const [certificates, setCertificates] = useState<Certificate[]>([]);
     const [uris, setUris] = useState<URI[]>([]);
     const [isScanning, setIsScanning] = useState(false);
-
 
     useEffect(() => {
         fetchCertificates()
@@ -48,7 +54,12 @@ export default function Overview() {
         );
     };
 
-
+    // When a certificate is updated in the modal, we update the state here
+    // to reflect the changes in the table without needing to refetch all certificates (although the table does not show the updated properties)
+    const handleUpdateCertificate = (updatedCert: Certificate) => {
+        setCertificates((prev) => prev.map((cert) => (cert.id === updatedCert.id ? updatedCert : cert))); // setting certificates to what they were before, but replacing the updated certificate
+    };
+    
     return (
         <div className="overview-page-container">
             <button onClick={handleScanUris} disabled={isScanning}>
@@ -65,7 +76,15 @@ export default function Overview() {
                 </button>
             </div>
 
-            {selectedTab === "certificates" ? <CertificateTable certificates={certificates} onAddNote={handleAddNoteToCertificate} /> : <UriTable uris={uris} />}
+            {selectedTab === "certificates" ? (
+                <CertificateTable
+                    certificates={certificates}
+                    onAddNote={handleAddNoteToCertificate}
+                    onUpdateCertificate={handleUpdateCertificate}
+                />
+            ) : (
+                <UriTable uris={uris} />
+            )}
             <br />
         </div>
     );

@@ -1,8 +1,7 @@
 import "./certificateModal.css";
 import { type Certificate, type Note } from "../../../services/apiFacade";
-import { useState } from "react";
-import { addNoteToCertificate } from "../../../services/apiFacade";
-
+import { useState, useEffect } from "react";
+import { addNoteToCertificate, updateCertificateEditableFields } from "../../../services/apiFacade";
 
 const dateOptions: Intl.DateTimeFormatOptions = {
     weekday: "long",
@@ -11,16 +10,39 @@ const dateOptions: Intl.DateTimeFormatOptions = {
     day: "numeric",
 };
 
-export default function CertificateModal({ certificate, onClose, onAddNote }: { certificate: Certificate; onClose: () => void; onAddNote: (certificateId: number, note: Note) => void }) {
+export default function CertificateModal({
+    certificate,
+    onClose,
+    onAddNote,
+    onUpdateCertificate
+}: {
+    certificate: Certificate;
+    onClose: () => void;
+    onAddNote: (certificateId: number, note: Note) => void;
+    onUpdateCertificate: (updatedCert: Certificate) => void;
+}) {
     const [newNoteText, setNewNoteText] = useState("");
     const [isAddingNote, setIsAddingNote] = useState(false);
     const [notes, setNotes] = useState<Note[]>(certificate.notes);
+    const [isUpdatingEditableFields, setIsUpdatingEditableFields] = useState(false);
+    const [editableFields, setEditableFields] = useState({
+        certificateLocation: certificate.certificateLocation || "",
+        passwordLocation: certificate.passwordLocation || "",
+        privateKeyLocation: certificate.privateKeyLocation || "",
+    });
+
+    // When the component mounts, we set the editable fields to the current values of the certificate
+    useEffect(() => {
+        setEditableFields({
+            certificateLocation: certificate.certificateLocation || "",
+            passwordLocation: certificate.passwordLocation || "",
+            privateKeyLocation: certificate.privateKeyLocation || "",
+        });
+    }, [certificate]);
 
     const handleAddNote = async () => {
         try {
-            console.log("adding note to certificate:", certificate.id, "with text:", newNoteText);
             const newNote = await addNoteToCertificate(certificate.id, newNoteText);
-            console.log("New note returned from backend:", newNote);
             onAddNote(certificate.id, newNote); // Update parent state
             setNotes((prevNotes) => [...prevNotes, newNote]); // Update local state
             setNewNoteText("");
@@ -29,6 +51,31 @@ export default function CertificateModal({ certificate, onClose, onAddNote }: { 
             console.error("Failed to add note:", err);
         }
     };
+
+    // When the user clicks update, the editable fields are sent to the backend
+    const handleUpdateCertificateEditableFields = async () => {
+        if (!isUpdatingEditableFields) {
+            setIsUpdatingEditableFields(true);
+        } else {
+            const updatedCertificate = await updateCertificateEditableFields(certificate.id, {
+                certificateLocation: editableFields.certificateLocation,
+                passwordLocation: editableFields.passwordLocation,
+                privateKeyLocation: editableFields.privateKeyLocation,
+            });
+            onUpdateCertificate(updatedCertificate); // Update parent state in Overview.tsx
+            setIsUpdatingEditableFields(false);
+        }
+    };
+
+    // When the user clicks cancel, the editable fields which are used in the input fields are reset to the original values
+    const handleCancelUpdateEditableFields = () => {
+        setEditableFields({
+            certificateLocation: certificate.certificateLocation || "",
+            passwordLocation: certificate.passwordLocation || "",
+            privateKeyLocation: certificate.privateKeyLocation || "",
+        });
+        setIsUpdatingEditableFields(false);
+    }
 
     return (
         <div className="modal-overlay">
@@ -68,14 +115,45 @@ export default function CertificateModal({ certificate, onClose, onAddNote }: { 
                     </p>
                     <br />
                     <p>
-                        <strong>Certificate location:</strong> {certificate.certificateLocation || "N/A"}
+                        <strong>Certificate location: </strong>
+                        {!isUpdatingEditableFields ? (
+                            certificate.certificateLocation || "N/A"
+                        ) : (
+                            <input
+                                placeholder="type new location..."
+                                value={editableFields.certificateLocation}
+                                onChange={(e) => setEditableFields({ ...editableFields, certificateLocation: e.target.value })}
+                            ></input>
+                        )}
                     </p>
                     <p>
-                        <strong>Password location:</strong> {certificate.passwordLocation || "N/A"}
+                        <strong>Password location: </strong>
+                        {!isUpdatingEditableFields ? (
+                            certificate.passwordLocation || "N/A"
+                        ) : (
+                            <input
+                                placeholder="type new location..."
+                                value={editableFields.passwordLocation}
+                                onChange={(e) => setEditableFields({ ...editableFields, passwordLocation: e.target.value })}
+                            ></input>
+                        )}
                     </p>
                     <p>
-                        <strong>Private key location:</strong> {certificate.privateKeyLocation || "N/A"}
+                        <strong>Private key location: </strong>
+                        {!isUpdatingEditableFields ? (
+                            certificate.privateKeyLocation || "N/A"
+                        ) : (
+                            <input
+                                placeholder="type new location..."
+                                value={editableFields.privateKeyLocation}
+                                onChange={(e) => setEditableFields({ ...editableFields, privateKeyLocation: e.target.value })}
+                            ></input>
+                        )}
                     </p>
+                    <button onClick={handleUpdateCertificateEditableFields}>{!isUpdatingEditableFields ? "Update locations" : "Save"}</button>
+                    {isUpdatingEditableFields && (
+                        <button onClick={handleCancelUpdateEditableFields}>Cancel</button>
+                    )}
                 </div>
                 <div className="modal-date-details">
                     <p>
@@ -126,7 +204,7 @@ export default function CertificateModal({ certificate, onClose, onAddNote }: { 
                             </div>
                         </div>
                     )}
-                    
+
                     <ul>
                         {[...notes]
                             .sort((a, b) => new Date(b.localDateTimeStamp).getTime() - new Date(a.localDateTimeStamp).getTime())
@@ -141,6 +219,9 @@ export default function CertificateModal({ certificate, onClose, onAddNote }: { 
                                         })}{" "}
                                     </i>
                                     - {note.text}
+                                    <br />
+                                    <button className="note-btns">Edit</button>
+                                    <button className="note-btns">Delete</button>
                                 </li>
                             ))}
                     </ul>

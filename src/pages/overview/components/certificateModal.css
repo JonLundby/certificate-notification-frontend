@@ -66,3 +66,7 @@
 button {
     margin: 4px;
 }
+
+.note-btns {
+    width: 60px;
+}

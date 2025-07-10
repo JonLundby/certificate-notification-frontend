@@ -80,4 +80,25 @@ async function addNoteToCertificate(certificateId: number, noteText: string): Pr
     return response.json();
 }
 
-export { fetchCertificates, fetchURIs, scanUrisAndFetchCertificates, addNoteToCertificate };
+async function updateCertificateEditableFields(
+    certificateId: number,
+    locations: {
+        certificateLocation?: string;
+        passwordLocation?: string;
+        privateKeyLocation?: string;
+    }
+): Promise<Certificate> {
+    const response = await fetch(`${CERTIFICATES_URL}/${certificateId}/editable-properties`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(locations),
+    });
+    if (!response.ok) {
+        throw new Error(`Failed to update certificate locations: ${response.statusText}`);
+    }
+    return response.json();
+}
+
+export { fetchCertificates, fetchURIs, scanUrisAndFetchCertificates, addNoteToCertificate, updateCertificateEditableFields };

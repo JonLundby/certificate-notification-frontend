@@ -1,7 +1,7 @@
 import "./table.css";
 import React from "react";
 import { type Certificate, type Note } from "../../../services/apiFacade";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CertificateModal from "./CertificateModal";
 
 const dateOptions: Intl.DateTimeFormatOptions = {
@@ -11,9 +11,26 @@ const dateOptions: Intl.DateTimeFormatOptions = {
     day: "numeric",
 };
 
-export default function CertificateTable({ certificates, onAddNote }: { certificates: Certificate[]; onAddNote: (certificateId: number, note: Note) => void }) {
+export default function CertificateTable({
+    certificates,
+    onAddNote,
+    onUpdateCertificate,
+}: {
+    certificates: Certificate[];
+    onAddNote: (certificateId: number, note: Note) => void;
+    onUpdateCertificate: (updatedCert: Certificate) => void;
+}) {
     const [expandedIds, setExpandedIds] = useState<Set<number>>(new Set());
     const [selectedCert, setSelectedCert] = useState<Certificate | null>(null);
+
+    // Update selectedCert when certificates change 
+    useEffect(() => {
+        // If selectedCert is not null then the modal is open and the certificate shown in the modal is updated
+        if (selectedCert) {
+            const updated = certificates.find((c) => c.id === selectedCert.id); // Find the updated certificate
+            if (updated) setSelectedCert(updated); // Update selectedCert if it exists in the new certificates list
+        }
+    }, [certificates, selectedCert]);
 
     const toggleExpand = (id: number) => {
         setExpandedIds((prev) => {
@@ -103,9 +120,9 @@ export default function CertificateTable({ certificates, onAddNote }: { certific
                         setSelectedCert(null);
                     }}
                     onAddNote={onAddNote}
+                    onUpdateCertificate={onUpdateCertificate}
                 />
             )}
         </>
     );
-    
 }
