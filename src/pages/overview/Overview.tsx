@@ -2,7 +2,7 @@ import "./overview.css";
 import { useState, useEffect } from "react";
 import CertificateTable from "./components/CertificateTable";
 import UriTable from "./components/UriTable";
-import { fetchCertificates, fetchURIs, scanUrisAndFetchCertificates, type Certificate, type URI } from "../../services/apiFacade";
+import { fetchCertificates, fetchURIs, scanUrisAndFetchCertificates, type Certificate, type URI, type Note } from "../../services/apiFacade";
 
 export default function Overview() {
     const [selectedTab, setSelectedTab] = useState<"certificates" | "uris">("certificates");
@@ -42,6 +42,12 @@ export default function Overview() {
         }
     };
 
+    const handleAddNoteToCertificate = (certificateId: number, note: Note) => {
+        setCertificates((prevCertificates) =>
+            prevCertificates.map((cert) => (cert.id === certificateId ? { ...cert, notes: [...cert.notes, note] } : cert))
+        );
+    };
+
 
     return (
         <div className="overview-page-container">
@@ -59,7 +65,7 @@ export default function Overview() {
                 </button>
             </div>
 
-            {selectedTab === "certificates" ? <CertificateTable certificates={certificates} /> : <UriTable uris={uris} />}
+            {selectedTab === "certificates" ? <CertificateTable certificates={certificates} onAddNote={handleAddNoteToCertificate} /> : <UriTable uris={uris} />}
             <br />
         </div>
     );

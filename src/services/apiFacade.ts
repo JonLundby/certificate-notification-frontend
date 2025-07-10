@@ -66,4 +66,18 @@ async function scanUrisAndFetchCertificates(): Promise<Certificate[]> {
     return fetchCertificates();
 }
 
-export { fetchCertificates, fetchURIs, scanUrisAndFetchCertificates };
+async function addNoteToCertificate(certificateId: number, noteText: string): Promise<Note> {
+    const response = await fetch(`${CERTIFICATES_URL}/${certificateId}/notes`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ text: noteText }),
+    });
+    if (!response.ok) {
+        throw new Error(`Failed to add note: ${response.statusText}`);
+    }
+    return response.json();
+}
+
+export { fetchCertificates, fetchURIs, scanUrisAndFetchCertificates, addNoteToCertificate };

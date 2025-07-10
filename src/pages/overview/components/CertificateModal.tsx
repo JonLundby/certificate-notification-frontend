@@ -1,6 +1,8 @@
 import "./certificateModal.css";
-import { type Certificate } from "../../../services/apiFacade";
+import { type Certificate, type Note } from "../../../services/apiFacade";
 import { useState } from "react";
+import { addNoteToCertificate } from "../../../services/apiFacade";
+
 
 const dateOptions: Intl.DateTimeFormatOptions = {
     weekday: "long",
@@ -9,9 +11,24 @@ const dateOptions: Intl.DateTimeFormatOptions = {
     day: "numeric",
 };
 
-export default function CertificateModal({ certificate, onClose }: { certificate: Certificate; onClose: () => void }) {
+export default function CertificateModal({ certificate, onClose, onAddNote }: { certificate: Certificate; onClose: () => void; onAddNote: (certificateId: number, note: Note) => void }) {
     const [newNoteText, setNewNoteText] = useState("");
     const [isAddingNote, setIsAddingNote] = useState(false);
+    const [notes, setNotes] = useState<Note[]>(certificate.notes);
+
+    const handleAddNote = async () => {
+        try {
+            console.log("adding note to certificate:", certificate.id, "with text:", newNoteText);
+            const newNote = await addNoteToCertificate(certificate.id, newNoteText);
+            console.log("New note returned from backend:", newNote);
+            onAddNote(certificate.id, newNote); // Update parent state
+            setNotes((prevNotes) => [...prevNotes, newNote]); // Update local state
+            setNewNoteText("");
+            setIsAddingNote(false);
+        } catch (err) {
+            console.error("Failed to add note:", err);
+        }
+    };
 
     return (
         <div className="modal-overlay">
@@ -104,13 +121,14 @@ export default function CertificateModal({ certificate, onClose }: { certificate
                                 placeholder="Write your note here..."
                             />
                             <div className="new-note-btns">
-                                <button onClick={() => setIsAddingNote(false)}>Add note</button>
+                                <button onClick={handleAddNote}>Add note</button>
                                 <button onClick={() => setIsAddingNote(false)}>Cancel</button>
                             </div>
                         </div>
                     )}
+                    
                     <ul>
-                        {[...certificate.notes]
+                        {[...notes]
                             .sort((a, b) => new Date(b.localDateTimeStamp).getTime() - new Date(a.localDateTimeStamp).getTime())
                             .map((note) => (
                                 <li key={note.id}>

@@ -1,6 +1,6 @@
 import "./table.css";
 import React from "react";
-import { type Certificate } from "../../../services/apiFacade";
+import { type Certificate, type Note } from "../../../services/apiFacade";
 import { useState } from "react";
 import CertificateModal from "./CertificateModal";
 
@@ -11,7 +11,7 @@ const dateOptions: Intl.DateTimeFormatOptions = {
     day: "numeric",
 };
 
-export default function CertificateTable({ certificates }: { certificates: Certificate[] }) {
+export default function CertificateTable({ certificates, onAddNote }: { certificates: Certificate[]; onAddNote: (certificateId: number, note: Note) => void }) {
     const [expandedIds, setExpandedIds] = useState<Set<number>>(new Set());
     const [selectedCert, setSelectedCert] = useState<Certificate | null>(null);
 
@@ -97,10 +97,12 @@ export default function CertificateTable({ certificates }: { certificates: Certi
             </table>
             {selectedCert && (
                 <CertificateModal
+                    key={selectedCert.id} // Ensure modal updates when certificate changes
                     certificate={selectedCert}
                     onClose={() => {
                         setSelectedCert(null);
                     }}
+                    onAddNote={onAddNote}
                 />
             )}
         </>
