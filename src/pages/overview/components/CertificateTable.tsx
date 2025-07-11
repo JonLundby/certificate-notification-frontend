@@ -15,10 +15,12 @@ export default function CertificateTable({
     certificates,
     onAddNote,
     onUpdateCertificate,
+    onDeleteNote,
 }: {
     certificates: Certificate[];
     onAddNote: (certificateId: number, note: Note) => void;
     onUpdateCertificate: (updatedCert: Certificate) => void;
+    onDeleteNote: (noteId: number) => void;
 }) {
     const [expandedIds, setExpandedIds] = useState<Set<number>>(new Set());
     const [selectedCert, setSelectedCert] = useState<Certificate | null>(null);
@@ -121,6 +123,7 @@ export default function CertificateTable({
                     }}
                     onAddNote={onAddNote}
                     onUpdateCertificate={onUpdateCertificate}
+                    onDeleteNote={onDeleteNote}
                 />
             )}
         </>

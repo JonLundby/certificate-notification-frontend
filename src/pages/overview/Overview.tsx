@@ -59,7 +59,18 @@ export default function Overview() {
     const handleUpdateCertificate = (updatedCert: Certificate) => {
         setCertificates((prev) => prev.map((cert) => (cert.id === updatedCert.id ? updatedCert : cert))); // setting certificates to what they were before, but replacing the updated certificate
     };
-    
+
+    // When a note is deleted in the modal, we update the state here
+    // to reflect the changes in the table and modal without needing to refetch all certificates
+    const handleDeleteNote = (noteId: number) => {
+        setCertificates((prevCertificates) =>
+            prevCertificates.map((cert) => ({
+                ...cert,
+                notes: cert.notes.filter((note) => note.id !== noteId),
+            }))
+        );
+    };
+
     return (
         <div className="overview-page-container">
             <button onClick={handleScanUris} disabled={isScanning}>
@@ -81,6 +92,7 @@ export default function Overview() {
                     certificates={certificates}
                     onAddNote={handleAddNoteToCertificate}
                     onUpdateCertificate={handleUpdateCertificate}
+                    onDeleteNote={handleDeleteNote}
                 />
             ) : (
                 <UriTable uris={uris} />

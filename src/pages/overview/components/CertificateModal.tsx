@@ -1,7 +1,7 @@
 import "./certificateModal.css";
 import { type Certificate, type Note } from "../../../services/apiFacade";
 import { useState, useEffect } from "react";
-import { addNoteToCertificate, updateCertificateEditableFields } from "../../../services/apiFacade";
+import { addNoteToCertificate, updateCertificateEditableFields, updateEditedNote, deleteNote } from "../../../services/apiFacade";
 
 const dateOptions: Intl.DateTimeFormatOptions = {
     weekday: "long",
@@ -14,12 +14,14 @@ export default function CertificateModal({
     certificate,
     onClose,
     onAddNote,
-    onUpdateCertificate
+    onUpdateCertificate,
+    onDeleteNote,
 }: {
     certificate: Certificate;
     onClose: () => void;
     onAddNote: (certificateId: number, note: Note) => void;
     onUpdateCertificate: (updatedCert: Certificate) => void;
+    onDeleteNote: (noteId: number) => void;
 }) {
     const [newNoteText, setNewNoteText] = useState("");
     const [isAddingNote, setIsAddingNote] = useState(false);
@@ -30,6 +32,8 @@ export default function CertificateModal({
         passwordLocation: certificate.passwordLocation || "",
         privateKeyLocation: certificate.privateKeyLocation || "",
     });
+    const [currentlyEditingNoteId, setCurrentlyEditingNoteId] = useState<number | null>(null);
+    const [noteDraftText, setNoteDraftText] = useState(""); // for the currently edited note
 
     // When the component mounts, we set the editable fields to the current values of the certificate
     useEffect(() => {
@@ -75,7 +79,31 @@ export default function CertificateModal({
             privateKeyLocation: certificate.privateKeyLocation || "",
         });
         setIsUpdatingEditableFields(false);
-    }
+    };
+
+    const handleSaveNote = async (noteId: number) => {
+        try {
+            const updatedNote = await updateEditedNote(noteId, noteDraftText);
+            setNotes((prevNotes) => prevNotes.map((note) => (note.id === noteId ? updatedNote : note)));
+            setCurrentlyEditingNoteId(null);
+        } catch (err) {
+            console.error("Failed to update note:", err);
+        }
+    };
+
+    const handleDeleteNote = async (noteId: number) => {
+        try {
+            await deleteNote(noteId);
+            onDeleteNote(noteId); // Update parent state in Overview.tsx
+            setNotes((prevNotes) => prevNotes.filter((note) => note.id !== noteId));
+            if (currentlyEditingNoteId === noteId) {
+                setCurrentlyEditingNoteId(null);
+                setNoteDraftText("");
+            }
+        } catch (err) {
+            console.error("Failed to delete note:", err);
+        }
+    }   
 
     return (
         <div className="modal-overlay">
@@ -150,10 +178,10 @@ export default function CertificateModal({
                             ></input>
                         )}
                     </p>
-                    <button onClick={handleUpdateCertificateEditableFields}>{!isUpdatingEditableFields ? "Update locations" : "Save"}</button>
-                    {isUpdatingEditableFields && (
-                        <button onClick={handleCancelUpdateEditableFields}>Cancel</button>
-                    )}
+                    <button onClick={handleUpdateCertificateEditableFields}>
+                        {!isUpdatingEditableFields ? "Update locations" : "Save"}
+                    </button>
+                    {isUpdatingEditableFields && <button onClick={handleCancelUpdateEditableFields}>Cancel</button>}
                 </div>
                 <div className="modal-date-details">
                     <p>
@@ -218,10 +246,29 @@ export default function CertificateModal({
                                             day: "numeric",
                                         })}{" "}
                                     </i>
-                                    - {note.text}
-                                    <br />
-                                    <button className="note-btns">Edit</button>
-                                    <button className="note-btns">Delete</button>
+                                    -{" "}
+                                    {currentlyEditingNoteId === note.id ? (
+                                        <>
+                                            <textarea className="edit-note-text-area" value={noteDraftText} onChange={(e) => setNoteDraftText(e.target.value)} />
+                                            <br />
+                                            <button onClick={() => handleSaveNote(note.id)}>Save</button>
+                                            <button onClick={() => setCurrentlyEditingNoteId(null)}>Cancel</button>
+                                        </>
+                                    ) : (
+                                        <>
+                                                {note.text}
+                                                <br />
+                                            <button
+                                                onClick={() => {
+                                                    setCurrentlyEditingNoteId(note.id);
+                                                    setNoteDraftText(note.text);
+                                                }}
+                                            >
+                                                Edit
+                                            </button>
+                                            <button onClick={() => handleDeleteNote(note.id)}>Delete</button>
+                                        </>
+                                    )}
                                 </li>
                             ))}
                     </ul>

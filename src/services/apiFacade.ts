@@ -1,6 +1,7 @@
 const CERTIFICATES_URL = "http://localhost:8080/certificates";
 const URIS_URL = "http://localhost:8080/uris";
 const SCAN_URL = "http://localhost:8080/uris/scan";
+const NOTES_URL = "http://localhost:8080/notes";
 
 export interface Certificate {
     id: number;
@@ -101,4 +102,38 @@ async function updateCertificateEditableFields(
     return response.json();
 }
 
-export { fetchCertificates, fetchURIs, scanUrisAndFetchCertificates, addNoteToCertificate, updateCertificateEditableFields };
+async function updateEditedNote(noteId: number, noteText: string): Promise<Note> {
+    const response = await fetch(`${NOTES_URL}/${noteId}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ text: noteText }),
+    });
+    if (!response.ok) {
+        throw new Error(`Failed to update note: ${response.statusText}`);
+    }
+    return response.json();
+}
+
+async function deleteNote(noteId: number): Promise<void> {
+    const response = await fetch(`${NOTES_URL}/${noteId}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+    if (!response.ok) {
+        throw new Error(`Failed to delete note: ${response.statusText}`);
+    }
+}
+
+export {
+    fetchCertificates,
+    fetchURIs,
+    scanUrisAndFetchCertificates,
+    addNoteToCertificate,
+    updateCertificateEditableFields,
+    updateEditedNote,
+    deleteNote
+};
