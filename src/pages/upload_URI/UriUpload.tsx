@@ -1,5 +1,6 @@
 import "./uriUpload.css";
 import { useState } from "react";
+import { uploadURI } from "../../services/apiFacade";
 
 export default function UriUpload() {
     const [uriText, setUriText] = useState<string>("");
@@ -8,17 +9,11 @@ export default function UriUpload() {
     const handleUpload = async () => {
         setStatus("uploading");
         try {
-            const response = await fetch("http://localhost:8080/uris", {
-                method: "POST",
-                headers: { "content-type": "text/plain" },
-                body: uriText,
-            });
-            if (!response.ok) {
-                throw new Error(`Upload failed! status: ${response.status}`);
-            }
+            await uploadURI(uriText);
             setStatus("success");
+            setUriText(""); // Clear the input after successful upload
         } catch (error) {
-            console.error("Error uploading URIs:", error);
+            console.error("Upload failed:", error);
             setStatus("error");
         }
     }

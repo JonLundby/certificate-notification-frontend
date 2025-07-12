@@ -49,6 +49,17 @@ async function fetchURIs(): Promise<URI[]> {
     return response.json();
 }
 
+async function uploadURI(uriText: string): Promise<void> {
+    const response = await fetch(URIS_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain" },
+        body: uriText,
+    });
+    if (!response.ok) {
+        throw new Error(`Failed to upload URIs: ${response.statusText}`);
+    }
+}
+
 async function scanUrisAndFetchCertificates(): Promise<Certificate[]> {
     const response = await fetch(SCAN_URL, {
         method: "GET",
@@ -128,12 +139,28 @@ async function deleteNote(noteId: number): Promise<void> {
     }
 }
 
+async function uploadCertificate(file: File): Promise<void> {
+    const formData = new FormData();
+    formData.append("file", file);
+    const response = await fetch(`${CERTIFICATES_URL}/upload/client`, {
+        method: "POST",
+        body: formData,
+    });
+    if (!response.ok) {
+        throw new Error(`Failed to upload certificate: ${response.statusText}`);
+    }
+    
+    return response.json();
+}
+
 export {
     fetchCertificates,
     fetchURIs,
+    uploadURI,
     scanUrisAndFetchCertificates,
     addNoteToCertificate,
     updateCertificateEditableFields,
     updateEditedNote,
-    deleteNote
+    deleteNote,
+    uploadCertificate
 };

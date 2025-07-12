@@ -238,7 +238,7 @@ export default function CertificateModal({
                             .sort((a, b) => new Date(b.localDateTimeStamp).getTime() - new Date(a.localDateTimeStamp).getTime())
                             .map((note) => (
                                 <li key={note.id}>
-                                    <i>
+                                    <i style={{ fontWeight: "bold" }}>
                                         {new Date(note.localDateTimeStamp).toLocaleTimeString("da-DK", {
                                             weekday: "long",
                                             year: "numeric",

@@ -1,0 +1,28 @@
+.certificate-upload-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 100px;
+    gap: 20px;
+}
+
+.certificate-upload-button {
+    width: 300px;
+}
+
+.certificate-upload-input {
+    /* center */
+    display: block;
+    margin: 0 auto;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: larger;
+    width: 300px;
+}
+
+.certificate-upload-error {
+    color: red;
+    font-size: 1.2rem;
+}
