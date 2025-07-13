@@ -1,10 +1,10 @@
 .nav-header {
     position: fixed;
     top: 0;
-    margin: 16px;
-    background-color: black;
-    padding: 8px;
-    border-radius: 8px;
+    margin: 4px;
+    background-color: rgba(136, 140, 143, 0.39);
+    padding: 12px;
+    border-radius: 6px;
     position: relative;
 }
 

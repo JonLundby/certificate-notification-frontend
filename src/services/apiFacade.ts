@@ -147,7 +147,11 @@ async function uploadCertificate(file: File): Promise<void> {
         body: formData,
     });
     if (!response.ok) {
-        throw new Error(`Failed to upload certificate: ${response.statusText}`);
+        if (response.status === 409) {
+            throw new Error("Certificate already exists. Please check the certificate overview.");
+        } else {
+            throw new Error(`Failed to upload certificate: ${response.statusText}`);
+        }
     }
     
     return response.json();

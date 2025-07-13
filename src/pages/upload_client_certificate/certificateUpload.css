@@ -22,7 +22,6 @@
     width: 300px;
 }
 
-.certificate-upload-error {
-    color: red;
+.info-message {
     font-size: 1.2rem;
 }
