@@ -4,6 +4,7 @@
     align-items: center;
     padding-top: 100px;
     gap: 20px;
+    height: 100vh;
 }
 
 .certificate-upload-button {
