@@ -19,6 +19,7 @@ export default function App() {
             <Route path="/logout" element={<Logout />} />
 
             {/* Protected routes inside Layout */}
+            {/* a parent route holder for all protected routes */}
             <Route
                 element={
                     <RequireAuth roles={["admin", "user"]}>
@@ -26,6 +27,7 @@ export default function App() {
                     </RequireAuth>
                 }
             >
+                {/* Nested routes that require authentication will be rendered through the Layout components Outlet */}
                 <Route path="/overview" element={<Overview />} />
                 <Route path="/uploaduri" element={<UriUpload />} />
                 <Route path="/uploadcertificate" element={<CertificateUpload />} />

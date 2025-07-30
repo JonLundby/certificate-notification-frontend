@@ -17,18 +17,17 @@ interface LoginRequest {
 
 const authProvider = {
     isAuthenticated: false,
-    signIn(user_: LoginRequest): Promise<LoginResponse> { // user_ is of type LoginRequest and prom
-        // const options = makeOptions("POST", user_);
-        // return fetch(LOGIN_URL, options).then(handleHttpErrors);
+    signIn(user_: LoginRequest): Promise<LoginResponse> {
         return new Promise((resolve, reject) => {
-            // You can add validation logic here if needed
+            // !!! IMPORTANT: This is a mock implementation. Replace with actual API call...
+            // ...user_ should be validated against a real backend service. !!!
             if (user_.username === "admin" && user_.password === "1234") {
                 const fakeResponse: LoginResponse = {
                     username: "admin",
                     token: "fake-jwt-token",
                     roles: ["admin", "user"],
                 };
-                localStorage.setItem("roles", JSON.stringify(fakeResponse.roles)); // Store roles
+                // localStorage.setItem("roles", JSON.stringify(fakeResponse.roles)); // Store roles
                 resolve(fakeResponse);
             } else {
                 reject(new Error("Invalid credentials"));

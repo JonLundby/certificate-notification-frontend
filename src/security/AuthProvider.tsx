@@ -24,13 +24,18 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
             .then((user) => {
                 setUserName(user.username); // set the userName state to the username from the response
                 localStorage.setItem("username", user.username); // store the username in localStorage
+                localStorage.setItem("token", user.token); // store the token in localStorage
+                localStorage.setItem("roles", JSON.stringify(user.roles)); // store the roles in local
                 return user; // return the user object
             });
     }
 
     const logout = () => {
         setUserName(null); // clear the userName state
-        localStorage.removeItem("username"); // remove the username from localStorage
+        // clear the localStorage to remove any stored authentication data
+        localStorage.removeItem("token");
+        localStorage.removeItem("username");
+        localStorage.removeItem("roles");
     }
 
     function isLoggedIn() {

@@ -18,5 +18,7 @@ export default function RequireAuth({ children, roles }: Props) {
         return <Navigate to="/login" state={{ from: location }} replace />;
     }
 
+    // 'else' case: user is logged in and has the required roles
+    // Render the children components
     return children;
 }

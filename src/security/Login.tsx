@@ -22,7 +22,7 @@ export default function Login() {
 
         auth.login(user)
             .then(() => {
-            navigate(from, { replace: true }); //Navigate back to where the user came from
+            navigate(from, { replace: true }); //Navigate back to where the user came from which in case the user is not logged in is the login page and if the user is logged in it is the page they were trying to access before being redirected to the login page
         });
     };
 

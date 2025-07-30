@@ -25,7 +25,7 @@ export default function CertificateTable({
     const [expandedIds, setExpandedIds] = useState<Set<number>>(new Set());
     const [selectedCert, setSelectedCert] = useState<Certificate | null>(null);
 
-    // Update selectedCert when certificates change 
+    // Update selectedCert when certificates change
     useEffect(() => {
         // If selectedCert is not null then the modal is open and the certificate shown in the modal is updated
         if (selectedCert) {
@@ -73,10 +73,16 @@ export default function CertificateTable({
                                 <td>{new Date(certificate.dateNotBefore).toLocaleDateString("da-DK", dateOptions)}</td>
                                 <td>
                                     {new Date(certificate.dateNotAfter).toLocaleDateString("da-DK", dateOptions)}
-                                    {/* calculating if the certificate is expiring within 60 days */}
+                                    {/* calculating if the certificate is expiring within 60 days to add a ⚠️*/}
                                     {/* ADJUST TO DESIRABLE TIMEFRAME FX: 7 * 24 *... FOR A 7 DAY WARNING*/}
-                                    {new Date(certificate.dateNotAfter).getTime() - Date.now() < 60 * 24 * 60 * 60 * 1000 && (
-                                        <span> ⚠️</span>
+                                    {certificate.notifiedAt60Days !== null &&
+                                        !certificate.notifiedAt30Days &&
+                                        !certificate.notifiedAt14Days && <span>⚠️</span>}
+                                    {!certificate.notifiedAt60Days && certificate.notifiedAt30Days && !certificate.notifiedAt14Days && (
+                                        <span>⚠️⚠️</span>
+                                    )}
+                                    {!certificate.notifiedAt60Days && !certificate.notifiedAt30Days && certificate.notifiedAt14Days && (
+                                        <span>⚠️⚠️⚠️</span>
                                     )}
                                 </td>
                                 <td>{certificate.uris.length}</td>
