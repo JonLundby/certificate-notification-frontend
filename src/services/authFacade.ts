@@ -27,7 +27,6 @@ const authProvider = {
                     token: "fake-jwt-token",
                     roles: ["admin", "user"],
                 };
-                // localStorage.setItem("roles", JSON.stringify(fakeResponse.roles)); // Store roles
                 resolve(fakeResponse);
             } else {
                 reject(new Error("Invalid credentials"));
