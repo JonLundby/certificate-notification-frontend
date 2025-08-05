@@ -1,3 +1,29 @@
+# certificate-notification-frontend
+
+This is the frontend service for managing certificate expiration notifications and URI scanning.
+
+## How to Run
+Clone this repository & navigate to project directory:
+   ```bash
+   git clone <repo-url>
+   cd certificate-notification-frontend
+   ```
+
+Make sure you have Node.js installed (version 22.16.0 used in this project)
+
+Install dependencies:
+   ```bash
+   npm install
+   ```
+
+Run the development server:
+   ```bash
+   npm run dev
+   ```
+
+Open the localhost URL shown in the terminal (usually http://localhost:5173).
+
+---
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
